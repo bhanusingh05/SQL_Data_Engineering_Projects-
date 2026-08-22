@@ -2,6 +2,8 @@
 
 SQL exploratory data analysis of remote Data Engineer job postings. This project examines which skills are most requested, which skills are associated with the highest compensation, and which skills offer the best balance between demand and salary.
 
+![Job market star schema](../Resources/data_model.svg)
+
 ## Executive Summary
 
 - **Scope:** Three analytical SQL queries over a normalized job-postings schema.

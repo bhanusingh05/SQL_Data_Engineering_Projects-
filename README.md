@@ -13,6 +13,9 @@ A practical SQL portfolio built around a normalized Data Engineer job-postings d
 
 - [SQL Lesson Collection](Lessons/README.md): eight sequenced lessons covering SQL foundations through portfolio analysis
 - [EDA Project](1_EDA/README.md): demand, salary, and optimal-skill analysis for remote Data Engineer roles
+- [Applied Projects](Projects/README.md): warehouse marts and flat-to-star-schema modeling
+
+![SQL portfolio workflow](Resources/pipeline.svg)
 
 ## Repository Structure
 
@@ -33,6 +36,12 @@ SQL_Data_Engineering_Projects/
 │   ├── 02_top_paying_skills.sql
 │   ├── 03_optimal_skills.sql
 │   └── README.md
+├── Projects/
+│   ├── 2_WH_Mart_Build/
+│   └── 3_Flat_to_WH_Build/
+├── Resources/
+│   ├── data_model.svg
+│   └── pipeline.svg
 └── README.md
 ```
 

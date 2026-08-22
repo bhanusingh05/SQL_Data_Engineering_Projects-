@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="430" viewBox="0 0 900 430" role="img" aria-labelledby="title desc">
+<title id="title">Job postings star schema</title><desc id="desc">A fact table connected to company and skills dimensions through a bridge table.</desc>
+<rect width="900" height="430" fill="#f7f4ee"/>
+<text x="45" y="48" font-family="Georgia,serif" font-size="26" fill="#17324d">Job Market Analytics Star Schema</text>
+<g font-family="Arial,sans-serif" font-size="15">
+<rect x="330" y="135" width="240" height="145" rx="8" fill="#17324d"/><text x="355" y="170" fill="white" font-weight="bold">job_postings_fact</text><text x="355" y="198" fill="#d9e7ee">job_id</text><text x="355" y="222" fill="#d9e7ee">company_id</text><text x="355" y="246" fill="#d9e7ee">salary_year_avg</text><text x="355" y="270" fill="#d9e7ee">job_work_from_home</text>
+<rect x="55" y="115" width="205" height="100" rx="8" fill="#d36b45"/><text x="78" y="150" fill="white" font-weight="bold">company_dim</text><text x="78" y="178" fill="#fff0e8">company_id</text><text x="78" y="202" fill="#fff0e8">name</text>
+<rect x="640" y="115" width="205" height="100" rx="8" fill="#2d766e"/><text x="662" y="150" fill="white" font-weight="bold">skills_dim</text><text x="662" y="178" fill="#e3f3ee">skill_id</text><text x="662" y="202" fill="#e3f3ee">skills</text>
+<rect x="330" y="335" width="240" height="65" rx="8" fill="#b8892d"/><text x="357" y="363" fill="white" font-weight="bold">skills_job_dim</text><text x="357" y="387" fill="#fff6d8">job_id + skill_id</text>
+<path d="M260 165H330M570 165H640M450 280V335" stroke="#5e6b73" stroke-width="3" fill="none"/>
+<text x="60" y="270" fill="#5e6b73">one company</text><text x="670" y="270" fill="#5e6b73">many skills</text><text x="595" y="375" fill="#5e6b73">many-to-many bridge</text>
+</g></svg>

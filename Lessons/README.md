@@ -2,6 +2,8 @@
 
 A practical SQL curriculum built around the same job-postings data model used by the EDA project. Each lesson introduces one production-relevant SQL concept, explains why it matters, and ends with a business question or reusable query pattern.
 
+![SQL workflow](../Resources/pipeline.svg)
+
 ## Learning Path
 
 | Order | Lesson | SQL topics | Portfolio signal |

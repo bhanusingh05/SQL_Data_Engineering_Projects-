@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="300" viewBox="0 0 900 300" role="img" aria-labelledby="title desc">
+<title id="title">SQL portfolio workflow</title><desc id="desc">A workflow from raw job data through modeling and quality checks to analytical marts.</desc>
+<rect width="900" height="300" fill="#17324d"/><text x="45" y="52" font-family="Georgia,serif" font-size="26" fill="#fff">From raw data to insight</text>
+<g font-family="Arial,sans-serif" font-size="16" text-anchor="middle">
+<rect x="45" y="115" width="160" height="82" rx="8" fill="#d36b45"/><text x="125" y="150" fill="white" font-weight="bold">Raw postings</text><text x="125" y="176" fill="#fff0e8">CSV / source tables</text>
+<rect x="265" y="115" width="160" height="82" rx="8" fill="#b8892d"/><text x="345" y="150" fill="white" font-weight="bold">Transform</text><text x="345" y="176" fill="#fff6d8">clean + type + join</text>
+<rect x="485" y="115" width="160" height="82" rx="8" fill="#2d766e"/><text x="565" y="150" fill="white" font-weight="bold">Warehouse</text><text x="565" y="176" fill="#e3f3ee">fact + dimensions</text>
+<rect x="705" y="115" width="150" height="82" rx="8" fill="#f2e9d8"/><text x="780" y="150" fill="#17324d" font-weight="bold">Insights</text><text x="780" y="176" fill="#35566b">marts + EDA</text>
+<path d="M205 156H265M425 156H485M645 156H705" stroke="#f2e9d8" stroke-width="4"/><path d="M250 146l15 10-15 10M470 146l15 10-15 10M690 146l15 10-15 10" fill="#f2e9d8"/>
+</g></svg>
