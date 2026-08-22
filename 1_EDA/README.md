@@ -2,6 +2,15 @@
 
 SQL exploratory data analysis of remote Data Engineer job postings. This project examines which skills are most requested, which skills are associated with the highest compensation, and which skills offer the best balance between demand and salary.
 
+## Executive Summary
+
+- **Scope:** Three analytical SQL queries over a normalized job-postings schema.
+- **Business questions:** What is in demand, what pays well, and what is the most practical skill investment?
+- **Approach:** Join the job fact table to the skills bridge and skill dimension, then aggregate and rank results.
+- **Outcome:** SQL, Python, cloud platforms, orchestration, distributed processing, and infrastructure skills emerge as strong priorities.
+
+For a quick review, start with [`03_optimal_skills.sql`](03_optimal_skills.sql), then inspect the demand and compensation analyses that support it.
+
 ## Research Questions
 
 1. **What are the most in-demand skills for Data Engineers?**
@@ -53,6 +62,8 @@ The queries expect the following relational tables:
 - `skills_job_dim`: bridge table connecting job postings to skills
 - `skills_dim`: skill names and skill IDs
 
+The model uses a star-schema pattern: `job_postings_fact` is the central fact table, `company_dim` and `skills_dim` provide descriptive attributes, and `skills_job_dim` resolves the many-to-many job-to-skill relationship.
+
 The source data is not included in this directory. Load these tables into your SQL environment before running the queries.
 
 ## Running the Analysis
@@ -88,3 +99,7 @@ If your SQL client does not support the `.read` command, open and execute each f
 - Ranking and limiting analytical results
 - Logarithmic scoring for multi-factor prioritization
 - Translating SQL output into actionable career insights
+
+## Portfolio Review Guide
+
+When presenting this project, explain the difference between the three populations: the demand query uses a case-insensitive title match, while the salary and optimal-skill queries use the normalized `Data Engineer` title and require a reported annual salary. Also explain why the optimal score uses `LN(demand_count)`: it rewards demand without allowing the largest categories to overwhelm salary.

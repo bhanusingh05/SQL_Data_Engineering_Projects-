@@ -1,11 +1,40 @@
-# SQL Data Engineering Projects
+# SQL Data Engineering Portfolio
 
-A portfolio of SQL work focused on analyzing Data Engineer job-market data with DuckDB. The repository combines a structured learning path with applied exploratory analysis.
+A practical SQL portfolio built around a normalized Data Engineer job-postings database. The repository combines a sequenced learning path with applied market analysis, demonstrating how to move from schema discovery to decision-ready insights.
+
+## Executive Summary
+
+- Built an eight-lesson SQL curriculum using a realistic fact, dimension, and bridge-table model.
+- Wrote analytical queries answering demand, salary, and skill-prioritization questions.
+- Applied joins, aggregations, median statistics, CTEs, window functions, data-quality checks, and scoring logic.
+- Used DuckDB and GitHub to create a reproducible, reviewable SQL portfolio.
 
 ## Start Here
 
 - [SQL Lesson Collection](Lessons/README.md): eight sequenced lessons covering SQL foundations through portfolio analysis
 - [EDA Project](1_EDA/README.md): demand, salary, and optimal-skill analysis for remote Data Engineer roles
+
+## Repository Structure
+
+```text
+SQL_Data_Engineering_Projects/
+├── Lessons/
+│   ├── 01_sql_foundations.sql
+│   ├── 02_schema_and_quality.sql
+│   ├── 03_filtering_and_case_logic.sql
+│   ├── 04_aggregations_and_kpis.sql
+│   ├── 05_relational_joins.sql
+│   ├── 06_ctes_and_reusable_analysis.sql
+│   ├── 07_window_functions.sql
+│   ├── 08_portfolio_analysis.sql
+│   └── README.md
+├── 1_EDA/
+│   ├── 01_top_demanded_skills.sql
+│   ├── 02_top_paying_skills.sql
+│   ├── 03_optimal_skills.sql
+│   └── README.md
+└── README.md
+```
 
 ## What This Demonstrates
 
@@ -28,6 +57,32 @@ job_postings_fact  --< skills_job_dim >-- skills_dim
 ```
 
 The source data is not included. Load the four tables into DuckDB before running the queries.
+
+## Skills Demonstrated
+
+### Query Design
+
+`SELECT`, aliases, filtering, `CASE`, `GROUP BY`, `HAVING`, `ORDER BY`, and top-N analysis.
+
+### Relational Modeling
+
+Fact-to-dimension joins, many-to-many bridge-table joins, grain awareness, and completeness checks with `LEFT JOIN`.
+
+### Analytical SQL
+
+CTEs, `MEDIAN`, null handling, `RANK`, `ROW_NUMBER`, `LAG`, logarithmic scoring, and multi-step analysis.
+
+### Engineering Practice
+
+Readable naming, explicit business rules, reusable query layers, documented assumptions, DuckDB validation, and version control.
+
+## Quick Start
+
+```bash
+duckdb
+```
+
+Inside DuckDB, connect to the database containing the four source tables, then run the lesson files in order. For the applied project, begin with [`1_EDA/README.md`](1_EDA/README.md) and execute its three SQL files.
 
 ## SQL Dialect
 
