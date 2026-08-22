@@ -1,12 +1,9 @@
-select 
-    job_id,
-    job_title_short,
-    salary_year_avg,
-    company_id
-from 
-    job_postings_fact
-limit 10;  
+-- LEGACY NOTE: use Lessons/02_schema_and_quality.sql for the structured course.
+-- The original examples are retained in a compact, readable form.
+SELECT job_id, job_title_short, salary_year_avg, company_id
+FROM job_postings_fact
+LIMIT 10;
 
-select * from company_dim limit 10;
+SELECT * FROM company_dim LIMIT 10;
 
-select * from information_schema.tables;
+SELECT table_name FROM information_schema.tables ORDER BY table_name;
