@@ -151,3 +151,109 @@ WHERE job_posted_date > DATE '2024-01-01';
 SELECT '07a - Flat table after DELETE' AS step;
 SELECT COUNT(*) AS remaining_flat_rows
 FROM staging.job_postings_flat;
+
+-- ---------------------------------------------------------------------------
+-- 8. TRUNCATE AND RELOAD THE FLAT TABLE
+-- ---------------------------------------------------------------------------
+
+SELECT '08 - Comparing the flat table before TRUNCATE' AS step;
+SELECT COUNT(*) AS rows_before_truncate
+FROM staging.job_postings_flat;
+
+-- TRUNCATE removes every row but keeps the table definition.
+TRUNCATE TABLE staging.job_postings_flat;
+
+SELECT '08a - Comparing the flat table after TRUNCATE' AS step;
+SELECT COUNT(*) AS rows_after_truncate
+FROM staging.job_postings_flat;
+
+-- Reload only recent postings from the source fact and company tables.
+INSERT INTO staging.job_postings_flat (
+	job_id,
+	job_title_short,
+	job_title,
+	job_location,
+	job_via,
+	job_schedule_type,
+	job_work_from_home,
+	search_location,
+	job_posted_date,
+	job_no_degree_mention,
+	job_health_insurance,
+	job_country,
+	salary_rate,
+	salary_year_avg,
+	salary_hour_avg,
+	company_id,
+	company_name
+)
+SELECT
+	jpf.job_id,
+	jpf.job_title_short,
+	jpf.job_title,
+	jpf.job_location,
+	jpf.job_via,
+	jpf.job_schedule_type,
+	jpf.job_work_from_home,
+	jpf.search_location,
+	jpf.job_posted_date,
+	jpf.job_no_degree_mention,
+	jpf.job_health_insurance,
+	jpf.job_country,
+	jpf.salary_rate,
+	jpf.salary_year_avg,
+	jpf.salary_hour_avg,
+	jpf.company_id,
+	cd.name AS company_name
+FROM data_jobs.job_postings_fact AS jpf
+LEFT JOIN data_jobs.company_dim AS cd
+	ON jpf.company_id = cd.company_id
+WHERE jpf.job_posted_date > DATE '2024-01-01';
+
+SELECT '08b - Comparing the flat table after INSERT' AS step;
+SELECT COUNT(*) AS rows_after_insert
+FROM staging.job_postings_flat;
+
+SELECT
+	job_id,
+	job_title_short,
+	job_posted_date,
+	company_name
+FROM staging.job_postings_flat
+ORDER BY job_posted_date DESC NULLS LAST
+LIMIT 10;
+
+-- ---------------------------------------------------------------------------
+-- 9. CREATE, DISPLAY, DROP, AND VERIFY A SAMPLE TABLE
+-- ---------------------------------------------------------------------------
+
+SELECT '09 - Creating a sample table' AS step;
+
+-- Drop first so this demonstration is safe to rerun.
+DROP TABLE IF EXISTS staging.sample_cleanup_table;
+
+CREATE TABLE staging.sample_cleanup_table (
+	sample_id INTEGER,
+	sample_name VARCHAR
+);
+
+INSERT INTO staging.sample_cleanup_table (sample_id, sample_name)
+VALUES
+	(1, 'TRUNCATE demonstration'),
+	(2, 'DROP TABLE demonstration');
+
+SELECT *
+FROM staging.sample_cleanup_table
+ORDER BY sample_id;
+
+SELECT '09a - Dropping the sample table' AS step;
+DROP TABLE IF EXISTS staging.sample_cleanup_table;
+
+-- Querying the catalog instead of selecting from the dropped table avoids an
+-- error while proving that the table no longer exists.
+SELECT
+	table_schema,
+	table_name
+FROM information_schema.tables
+WHERE table_schema = 'staging'
+  AND table_name = 'sample_cleanup_table';
