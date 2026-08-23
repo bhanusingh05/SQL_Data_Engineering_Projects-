@@ -10,9 +10,8 @@ ATTACH ':memory:' AS practice_db;
 -- Show the active jobs_mart database and the temporary practice database.
 SHOW DATABASES;
 
--- Keep the lesson tables inside jobs_mart, then remove the temporary database
--- from the session after demonstrating the lifecycle commands.
-USE jobs_mart;
+-- jobs_mart is already the active database because it was selected when
+-- DuckDB started. Remove only the temporary database from the session.
 DETACH practice_db;
 
 SHOW DATABASES;
@@ -103,12 +102,42 @@ FROM staging.preferred_role
 ORDER BY role_id;
 
 -- ---------------------------------------------------------------------------
--- 5. CLEAN UP THE PRACTICE OBJECT
+-- 5. UPSERT DATA WITH MERGE
 -- ---------------------------------------------------------------------------
 
--- Drop only the table created by this lesson. Keep the staging schema available
--- for later practice files.
+-- Create a small source table containing one existing role and one new role.
+CREATE TABLE staging.preferred_role_updates (
+    role_id INTEGER,
+    role VARCHAR
+);
+
+INSERT INTO staging.preferred_role_updates (role_id, role)
+VALUES
+    (1, 'Lead Data Engineer'),
+    (4, 'Analytics Engineer');
+
+-- MERGE updates the matching role and inserts the new role in one statement.
+MERGE INTO staging.preferred_role AS target
+USING staging.preferred_role_updates AS source
+    ON target.role_id = source.role_id
+WHEN MATCHED THEN
+    UPDATE SET role = source.role
+WHEN NOT MATCHED THEN
+    INSERT (role_id, role)
+    VALUES (source.role_id, source.role);
+
+SELECT
+    role_id,
+    role
+FROM staging.preferred_role
+ORDER BY role_id;
+
+-- ---------------------------------------------------------------------------
+-- 6. CLEAN UP THE PRACTICE OBJECTS
+-- ---------------------------------------------------------------------------
+
 DROP TABLE IF EXISTS staging.preferred_role;
+DROP TABLE IF EXISTS staging.preferred_role_updates;
 
 -- Verify that the practice table has been removed.
 SELECT
