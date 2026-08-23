@@ -2,6 +2,12 @@
 -- 1. Open the project database: .open jobs_mart.duckdb
 -- .read Lessons/practice/01_DDL_DML_Pt1.sql
 --
+-- For database systems that support database-level DDL, the equivalent setup
+-- is:
+-- CREATE DATABASE IF NOT EXISTS jobs_mart;
+-- USE jobs_mart;
+-- DuckDB uses the .open command above instead of these two statements.
+--
 -- LESSON: DDL AND DML, PART 1
 -- Topic: databases, schemas, tables, and basic data changes in DuckDB
 --
