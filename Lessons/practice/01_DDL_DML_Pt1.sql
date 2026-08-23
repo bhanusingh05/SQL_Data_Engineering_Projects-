@@ -20,6 +20,8 @@ SHOW DATABASES;
 -- 1. DISCOVER THE CURRENT CATALOG
 -- ---------------------------------------------------------------------------
 
+SELECT '01 - Discovering the current database and schemas' AS step;
+
 -- List databases attached to the current DuckDB session.
 SELECT
     database_name,
@@ -44,6 +46,8 @@ WHERE schema_name = 'staging';
 -- 2. CREATE THE STAGING SCHEMA
 -- ---------------------------------------------------------------------------
 
+SELECT '02 - Rebuilding the staging schema' AS step;
+
 -- Rebuild only this lesson's schema so the script is safe to rerun and does
 -- not duplicate the demonstration rows.
 DROP SCHEMA IF EXISTS staging CASCADE;
@@ -53,6 +57,8 @@ CREATE SCHEMA IF NOT EXISTS staging;
 -- ---------------------------------------------------------------------------
 -- 3. CREATE A TABLE WITH DDL
 -- ---------------------------------------------------------------------------
+
+SELECT '03 - Creating the preferred_role table' AS step;
 
 -- Use the correct spelling: preferred_role.
 CREATE TABLE IF NOT EXISTS staging.preferred_role (
@@ -72,6 +78,8 @@ ORDER BY table_name;
 -- ---------------------------------------------------------------------------
 -- 4. INSERT AND READ ROWS WITH DML
 -- ---------------------------------------------------------------------------
+
+SELECT '04 - Inserting, updating, and deleting role data' AS step;
 
 INSERT INTO staging.preferred_role (role_id, role)
 VALUES
@@ -98,6 +106,8 @@ WHERE role_id = 3;
 -- 5. EVOLVE THE TABLE WITH ALTER TABLE
 -- ---------------------------------------------------------------------------
 
+SELECT '05 - Adding and populating the boolean role flag' AS step;
+
 -- Add a boolean flag to identify the preferred role. IF NOT EXISTS keeps the
 -- schema change safe when the lesson is run more than once.
 ALTER TABLE staging.preferred_role
@@ -118,6 +128,8 @@ ORDER BY role_id;
 -- ---------------------------------------------------------------------------
 -- 6. UPSERT DATA WITH MERGE
 -- ---------------------------------------------------------------------------
+
+SELECT '06 - Merging role updates into the target table' AS step;
 
 -- Create a small source table containing one existing role and one new role.
 CREATE TABLE staging.preferred_role_updates (
@@ -150,6 +162,8 @@ ORDER BY role_id;
 -- ---------------------------------------------------------------------------
 -- 7. CLEAN UP THE PRACTICE OBJECTS
 -- ---------------------------------------------------------------------------
+
+SELECT '07 - Cleaning up practice tables' AS step;
 
 DROP TABLE IF EXISTS staging.preferred_role;
 DROP TABLE IF EXISTS staging.preferred_role_updates;
