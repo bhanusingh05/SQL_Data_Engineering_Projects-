@@ -160,12 +160,48 @@ FROM staging.preferred_role
 ORDER BY role_id;
 
 -- ---------------------------------------------------------------------------
--- 7. CLEAN UP THE PRACTICE OBJECTS
+-- 7. RENAME THE TABLE AND EVOLVE THE COLUMN
 -- ---------------------------------------------------------------------------
 
-SELECT '07 - Cleaning up practice tables' AS step;
+SELECT '07 - Renaming the table and converting the priority column' AS step;
 
-DROP TABLE IF EXISTS staging.preferred_role;
+-- Rename the table from preferred_role to priority_roles.
+ALTER TABLE staging.preferred_role
+RENAME TO priority_roles;
+
+-- Add a boolean column before demonstrating a column rename and type change.
+ALTER TABLE staging.priority_roles
+ADD COLUMN IF NOT EXISTS preferred_role BOOLEAN DEFAULT FALSE;
+
+UPDATE staging.priority_roles
+SET preferred_role = TRUE
+WHERE role_id = 1;
+
+-- Rename preferred_role to priority_lvl. The final name uses the correct
+-- spelling and a single underscore for a clean production-style identifier.
+ALTER TABLE staging.priority_roles
+RENAME COLUMN preferred_role TO priority_lvl;
+
+-- Convert TRUE/FALSE to integer priority values: TRUE becomes 1 and FALSE 0.
+ALTER TABLE staging.priority_roles
+ALTER COLUMN priority_lvl SET DATA TYPE INTEGER
+USING CASE WHEN priority_lvl THEN 1 ELSE 0 END;
+
+SELECT
+    role_id,
+    role,
+    is_preferred_role,
+    priority_lvl
+FROM staging.priority_roles
+ORDER BY role_id;
+
+-- ---------------------------------------------------------------------------
+-- 8. CLEAN UP THE PRACTICE OBJECTS
+-- ---------------------------------------------------------------------------
+
+SELECT '08 - Cleaning up practice tables' AS step;
+
+DROP TABLE IF EXISTS staging.priority_roles;
 DROP TABLE IF EXISTS staging.preferred_role_updates;
 
 -- Verify that the practice table has been removed.
