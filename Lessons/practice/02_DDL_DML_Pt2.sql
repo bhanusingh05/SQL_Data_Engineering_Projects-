@@ -132,3 +132,22 @@ SELECT
 FROM senior_jobs_flat_temp
 
 ORDER BY table_name;
+
+-- ---------------------------------------------------------------------------
+-- 7. DELETE RECENT ROWS FROM THE FLAT TABLE
+-- ---------------------------------------------------------------------------
+
+SELECT '07 - Preparing to delete rows posted after 2024-01-01' AS step;
+
+-- Preview the number of rows affected before changing the table.
+SELECT COUNT(*) AS rows_to_delete
+FROM staging.job_postings_flat
+WHERE job_posted_date > DATE '2024-01-01';
+
+-- Delete only from the derived flat table. The source fact table is preserved.
+DELETE FROM staging.job_postings_flat
+WHERE job_posted_date > DATE '2024-01-01';
+
+SELECT '07a - Flat table after DELETE' AS step;
+SELECT COUNT(*) AS remaining_flat_rows
+FROM staging.job_postings_flat;
