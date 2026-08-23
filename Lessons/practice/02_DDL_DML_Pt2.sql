@@ -88,3 +88,30 @@ where job_title_short = 'Senior Data Engineer';
 
 SELECT *
 FROM senior_jobs_flat_temp;
+
+-- ---------------------------------------------------------------------------
+-- 6. FINAL ROW-COUNT SUMMARY
+-- ---------------------------------------------------------------------------
+
+SELECT '06 - Counting rows in the three main tables' AS step;
+
+SELECT
+	'data_jobs.job_postings_fact' AS table_name,
+	COUNT(*) AS row_count
+FROM data_jobs.job_postings_fact
+
+UNION ALL
+
+SELECT
+	'data_jobs.company_dim' AS table_name,
+	COUNT(*) AS row_count
+FROM data_jobs.company_dim
+
+UNION ALL
+
+SELECT
+	'staging.job_postings_flat' AS table_name,
+	COUNT(*) AS row_count
+FROM staging.job_postings_flat
+
+ORDER BY table_name;
