@@ -66,6 +66,9 @@ CREATE TABLE IF NOT EXISTS staging.preferred_role (
     role VARCHAR
 );
 
+SELECT '03a - Table created: current rows' AS step;
+SELECT * FROM staging.preferred_role ORDER BY role_id;
+
 -- Inspect the table definition through information_schema.
 SELECT
     table_schema,
@@ -98,9 +101,15 @@ UPDATE staging.preferred_role
 SET role = 'Senior Data Engineer'
 WHERE role_id = 1;
 
+SELECT '04a - After UPDATE: role_id 1 changed' AS step;
+SELECT * FROM staging.preferred_role ORDER BY role_id;
+
 -- Delete one row using its key.
 DELETE FROM staging.preferred_role
 WHERE role_id = 3;
+
+SELECT '04b - After DELETE: role_id 3 removed' AS step;
+SELECT * FROM staging.preferred_role ORDER BY role_id;
 
 -- ---------------------------------------------------------------------------
 -- 5. EVOLVE THE TABLE WITH ALTER TABLE
@@ -113,9 +122,16 @@ SELECT '05 - Adding and populating the boolean role flag' AS step;
 ALTER TABLE staging.preferred_role
 ADD COLUMN IF NOT EXISTS is_preferred_role BOOLEAN DEFAULT FALSE;
 
+SELECT '05a - After ALTER: boolean column added' AS step;
+DESCRIBE staging.preferred_role;
+SELECT * FROM staging.preferred_role ORDER BY role_id;
+
 UPDATE staging.preferred_role
 SET is_preferred_role = TRUE
 WHERE role_id = 1;
+
+SELECT '05b - After UPDATE: preferred flag populated' AS step;
+SELECT * FROM staging.preferred_role ORDER BY role_id;
 
 -- Confirm the final table contents after the DML operations.
 SELECT
@@ -141,6 +157,9 @@ INSERT INTO staging.preferred_role_updates (role_id, role)
 VALUES
     (1, 'Lead Data Engineer'),
     (4, 'Analytics Engineer');
+
+SELECT '06a - MERGE source rows' AS step;
+SELECT * FROM staging.preferred_role_updates ORDER BY role_id;
 
 -- MERGE updates the matching role and inserts the new role in one statement.
 MERGE INTO staging.preferred_role AS target
@@ -169,23 +188,40 @@ SELECT '07 - Renaming the table and converting the priority column' AS step;
 ALTER TABLE staging.preferred_role
 RENAME TO priority_roles;
 
+SELECT '07a - After ALTER: table renamed to priority_roles' AS step;
+SELECT * FROM staging.priority_roles ORDER BY role_id;
+
 -- Add a boolean column before demonstrating a column rename and type change.
 ALTER TABLE staging.priority_roles
 ADD COLUMN IF NOT EXISTS preferred_role BOOLEAN DEFAULT FALSE;
 
+SELECT '07b - After ALTER: preferred_role boolean column added' AS step;
+DESCRIBE staging.priority_roles;
+SELECT * FROM staging.priority_roles ORDER BY role_id;
+
 UPDATE staging.priority_roles
 SET preferred_role = TRUE
 WHERE role_id = 1;
+
+SELECT '07c - After UPDATE: preferred_role values populated' AS step;
+SELECT * FROM staging.priority_roles ORDER BY role_id;
 
 -- Rename preferred_role to priority_lvl. The final name uses the correct
 -- spelling and a single underscore for a clean production-style identifier.
 ALTER TABLE staging.priority_roles
 RENAME COLUMN preferred_role TO priority_lvl;
 
+SELECT '07d - After ALTER: column renamed to priority_lvl' AS step;
+DESCRIBE staging.priority_roles;
+SELECT * FROM staging.priority_roles ORDER BY role_id;
+
 -- Convert TRUE/FALSE to integer priority values: TRUE becomes 1 and FALSE 0.
 ALTER TABLE staging.priority_roles
 ALTER COLUMN priority_lvl SET DATA TYPE INTEGER
 USING CASE WHEN priority_lvl THEN 1 ELSE 0 END;
+
+SELECT '07e - After ALTER: priority_lvl converted to INTEGER' AS step;
+DESCRIBE staging.priority_roles;
 
 SELECT
     role_id,
