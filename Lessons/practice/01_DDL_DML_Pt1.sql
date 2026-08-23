@@ -1,18 +1,24 @@
--- HOW TO RUN IN MYSQL:
--- mysql -u <username> -p < Lessons/practice/01_DDL_DML_Pt1.sql
+-- HOW TO RUN IN DUCKDB:
+-- duckdb jobs_mart.duckdb
+-- .read Lessons/practice/01_DDL_DML_Pt1.sql
 --
--- Reset the practice database before rebuilding it.
-DROP DATABASE IF EXISTS jobs_mart;
-CREATE DATABASE IF NOT EXISTS jobs_mart;
-SHOW DATABASES;
-USE jobs_mart;
+-- Open jobs_mart.duckdb before creating the schema. DuckDB cannot drop or
+-- detach the active default database, so this lesson resets only its schema.
+.open jobs_mart.duckdb
 --
 -- LESSON: DDL AND DML, PART 1
--- Topic: databases, schemas, tables, and basic data changes in MySQL
+-- Topic: databases, schemas, tables, and basic data changes in DuckDB
 
 -- ---------------------------------------------------------------------------
 -- 1. DISCOVER THE CURRENT CATALOG
 -- ---------------------------------------------------------------------------
+
+-- List databases attached to the current DuckDB session.
+SELECT
+    database_name,
+    path
+FROM duckdb_databases()
+ORDER BY database_name;
 
 -- List schemas available in the connected DuckDB database.
 SELECT
@@ -30,6 +36,10 @@ WHERE schema_name = 'staging';
 -- ---------------------------------------------------------------------------
 -- 2. CREATE THE STAGING SCHEMA
 -- ---------------------------------------------------------------------------
+
+-- Reset only the staging objects created by this lesson. CASCADE removes
+-- dependent tables and avoids attempting to detach the active database.
+DROP SCHEMA IF EXISTS staging CASCADE;
 
 -- IF NOT EXISTS makes this setup safe to run more than once.
 CREATE SCHEMA IF NOT EXISTS staging;
