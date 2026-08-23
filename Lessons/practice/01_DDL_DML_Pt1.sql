@@ -5,7 +5,7 @@
 -- DuckDB database-lifecycle equivalent:
 -- ATTACH opens or creates an attached database; DETACH removes it from the
 -- current session. DETACH does not delete a database file from disk.
-ATTACH ':memory:' AS practice_db;
+ATTACH IF NOT EXISTS ':memory:' AS practice_db;
 
 -- Show the active jobs_mart database and the temporary practice database.
 SHOW DATABASES;
