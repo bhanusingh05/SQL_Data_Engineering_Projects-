@@ -1,19 +1,14 @@
--- HOW TO RUN IN DUCKDB:
--- 1. Open the project database: .open jobs_mart.duckdb
--- .read Lessons/practice/01_DDL_DML_Pt1.sql
+-- HOW TO RUN IN MYSQL:
+-- mysql -u <username> -p < Lessons/practice/01_DDL_DML_Pt1.sql
 --
--- The following database commands are executable in MySQL and other systems
--- that support database-level DDL. They must run before schema creation.
+-- Reset the practice database before rebuilding it.
+DROP DATABASE IF EXISTS jobs_mart;
 CREATE DATABASE IF NOT EXISTS jobs_mart;
+SHOW DATABASES;
 USE jobs_mart;
 --
 -- LESSON: DDL AND DML, PART 1
--- Topic: databases, schemas, tables, and basic data changes in DuckDB
---
--- DuckDB works with a database file and schemas inside that database. The
--- .open command above makes jobs_mart.duckdb the active database for this
--- lesson. Unlike some cloud warehouses, CREATE DATABASE and USE are not
--- needed in DuckDB; the database file is selected with .open instead.
+-- Topic: databases, schemas, tables, and basic data changes in MySQL
 
 -- ---------------------------------------------------------------------------
 -- 1. DISCOVER THE CURRENT CATALOG
