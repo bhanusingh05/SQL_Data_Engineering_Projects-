@@ -2,9 +2,12 @@
 -- 1. Start DuckDB from the project root: duckdb
 -- 2. Run this file: .read Lessons/practice/01_DDL_DML_Pt1.sql
 --
--- jobs_mart is the DuckDB database file. DuckDB cannot detach its active
--- default database, so this script resets only the staging schema.
-.open jobs_mart.duckdb
+-- Select the source database first so jobs_mart is not the active default
+-- database when it is attached. The data_jobs database must already be
+-- attached in the DuckDB session before running this file.
+USE data_jobs;
+ATTACH IF NOT EXISTS 'jobs_mart.duckdb' AS jobs_mart;
+USE jobs_mart;
 --
 -- LESSON: DDL AND DML, PART 1
 -- Topic: databases, schemas, tables, and basic data changes in DuckDB
