@@ -94,15 +94,29 @@ WHERE role_id = 1;
 DELETE FROM staging.preferred_role
 WHERE role_id = 3;
 
+-- ---------------------------------------------------------------------------
+-- 5. EVOLVE THE TABLE WITH ALTER TABLE
+-- ---------------------------------------------------------------------------
+
+-- Add a boolean flag to identify the preferred role. IF NOT EXISTS keeps the
+-- schema change safe when the lesson is run more than once.
+ALTER TABLE staging.preferred_role
+ADD COLUMN IF NOT EXISTS is_preferred_role BOOLEAN DEFAULT FALSE;
+
+UPDATE staging.preferred_role
+SET is_preferred_role = TRUE
+WHERE role_id = 1;
+
 -- Confirm the final table contents after the DML operations.
 SELECT
     role_id,
-    role
+    role,
+    is_preferred_role
 FROM staging.preferred_role
 ORDER BY role_id;
 
 -- ---------------------------------------------------------------------------
--- 5. UPSERT DATA WITH MERGE
+-- 6. UPSERT DATA WITH MERGE
 -- ---------------------------------------------------------------------------
 
 -- Create a small source table containing one existing role and one new role.
@@ -128,12 +142,13 @@ WHEN NOT MATCHED THEN
 
 SELECT
     role_id,
-    role
+    role,
+    is_preferred_role
 FROM staging.preferred_role
 ORDER BY role_id;
 
 -- ---------------------------------------------------------------------------
--- 6. CLEAN UP THE PRACTICE OBJECTS
+-- 7. CLEAN UP THE PRACTICE OBJECTS
 -- ---------------------------------------------------------------------------
 
 DROP TABLE IF EXISTS staging.preferred_role;
