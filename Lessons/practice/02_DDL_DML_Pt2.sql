@@ -1,27 +1,12 @@
--- MOTHERDUCK SETUP:
--- Run this file from a DuckDB session with MotherDuck access.
--- The md:data_jobs path reconnects to the existing MotherDuck database.
-ATTACH IF NOT EXISTS 'md:data_jobs' AS data_jobs;
+-- HOW TO RUN IN DUCKDB:
+-- .read Lessons/practice/02_DDL_DML_Pt2.sql
+-- The source tables are expected in the attached data_jobs database.
 
--- STEP 1: List databases attached to the current DuckDB session.
-SELECT '01 - Reloading and listing the data_jobs database' AS step;
-SHOW DATABASES;
-
--- STEP 2: Select the reloaded data_jobs database.
-USE data_jobs;
-
--- STEP 3: Join job postings with company details.
-
--- Inspect the structure of the job-postings fact table.
-SELECT '03a - Describing job_postings_fact' AS step;
-DESCRIBE job_postings_fact;
-
--- Inspect the structure of the company dimension table.
-SELECT '03b - Describing company_dim' AS step;
-DESCRIBE company_dim;
+SELECT '01 - Preparing the staging schema' AS step;
+CREATE SCHEMA IF NOT EXISTS staging;
 
 -- Preview job postings together with their company details.
-SELECT '03c - Previewing joined job and company data' AS step;
+SELECT '02 - Previewing joined job and company data' AS step;
 SELECT
 	jpf.job_id,
 	jpf.job_title_short,
@@ -31,7 +16,75 @@ SELECT
 	jpf.salary_year_avg,
 	jpf.company_id,
 	cd.name AS company_name
-FROM job_postings_fact AS jpf
-LEFT JOIN company_dim AS cd
+FROM data_jobs.job_postings_fact AS jpf
+LEFT JOIN data_jobs.company_dim AS cd
 	ON jpf.company_id = cd.company_id
 LIMIT 10;
+
+
+-- 03 - Rebuild the flattened table with CTAS.
+SELECT '03 - Rebuilding job_postings_flat' AS step;
+
+CREATE OR REPLACE TABLE staging.job_postings_flat AS
+SELECT
+	jpf.job_id,
+	jpf.job_title_short,
+	jpf.job_title,
+	jpf.job_location,
+    jpf.job_via,
+    jpf.job_schedule_type,
+	jpf.job_work_from_home,
+    jpf.search_location,
+    jpf.job_posted_date,
+    jpf.job_no_degree_mention,
+    jpf.job_health_insurance,
+    jpf.job_country,
+    jpf.salary_rate,
+	jpf.salary_year_avg,
+	jpf.salary_hour_avg,
+	jpf.company_id,
+	cd.name AS company_name
+FROM data_jobs.job_postings_fact AS jpf
+LEFT JOIN data_jobs.company_dim AS cd
+	ON jpf.company_id = cd.company_id;
+
+
+SELECT COUNT(*) AS flattened_row_count
+FROM staging.job_postings_flat;
+
+
+
+-- 04 - Rebuild a view containing only priority roles.
+SELECT '04 - Rebuilding the priority jobs view' AS step;
+
+create or replace view staging.priority_jobs_flat_view as
+SELECT jpf.*
+from staging.job_postings_flat as jpf
+join staging.priority_roles AS r
+on jpf.job_title_short = r.role_name
+where r.priority_lvl = 1;
+
+SELECT COUNT(*) AS priority_view_row_count
+FROM staging.priority_jobs_flat_view;
+
+
+SELECT
+	job_title_short,
+	COUNT(*) AS posting_count
+from staging.priority_jobs_flat_view
+group by job_title_short
+ORDER BY posting_count DESC;
+
+
+
+
+-- 05 - Rebuild a temporary analysis table for senior roles.
+SELECT '05 - Rebuilding the senior jobs temporary table' AS step;
+
+CREATE OR REPLACE TEMPORARY TABLE senior_jobs_flat_temp AS
+SELECT *
+FROM staging.priority_jobs_flat_view
+where job_title_short = 'Senior Data Engineer';
+
+SELECT *
+FROM senior_jobs_flat_temp;
