@@ -2,11 +2,20 @@
 -- 1. Start DuckDB in the jobs_mart database: duckdb jobs_mart.duckdb
 -- 2. Run this file: .read Lessons/practice/01_DDL_DML_Pt1.sql
 --
--- This lesson runs directly in the active jobs_mart database. No data_jobs
--- attachment or database switch is required.
---
--- LESSON: DDL AND DML, PART 1
--- Topic: databases, schemas, tables, and basic data changes in DuckDB
+-- DuckDB database-lifecycle equivalent:
+-- ATTACH opens or creates an attached database; DETACH removes it from the
+-- current session. DETACH does not delete a database file from disk.
+ATTACH ':memory:' AS practice_db;
+
+-- Show the active jobs_mart database and the temporary practice database.
+SHOW DATABASES;
+
+-- Keep the lesson tables inside jobs_mart, then remove the temporary database
+-- from the session after demonstrating the lifecycle commands.
+USE jobs_mart;
+DETACH practice_db;
+
+SHOW DATABASES;
 
 -- ---------------------------------------------------------------------------
 -- 1. DISCOVER THE CURRENT CATALOG
