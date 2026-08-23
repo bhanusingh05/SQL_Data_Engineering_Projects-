@@ -1,18 +1,24 @@
--- HOW TO RUN IN MYSQL:
--- mysql -u <username> -p < Lessons/practice/01_DDL_DML_Pt1.sql
+-- HOW TO RUN IN DUCKDB:
+-- 1. Start DuckDB from the project root: duckdb
+-- 2. Run this file: .read Lessons/practice/01_DDL_DML_Pt1.sql
 --
--- Reset the practice database before rebuilding it.
-DROP DATABASE IF EXISTS jobs_mart;
-CREATE DATABASE IF NOT EXISTS jobs_mart;
-SHOW DATABASES;
-USE jobs_mart;
+-- jobs_mart is the DuckDB database file. DuckDB cannot detach its active
+-- default database, so this script resets only the staging schema.
+.open jobs_mart.duckdb
 --
 -- LESSON: DDL AND DML, PART 1
--- Topic: databases, schemas, tables, and basic data changes in MySQL
+-- Topic: databases, schemas, tables, and basic data changes in DuckDB
 
 -- ---------------------------------------------------------------------------
 -- 1. DISCOVER THE CURRENT CATALOG
 -- ---------------------------------------------------------------------------
+
+-- List databases attached to the current DuckDB session.
+SELECT
+    database_name,
+    path
+FROM duckdb_databases()
+ORDER BY database_name;
 
 -- List schemas available in the connected database.
 SELECT
@@ -31,7 +37,10 @@ WHERE schema_name = 'staging';
 -- 2. CREATE THE STAGING SCHEMA
 -- ---------------------------------------------------------------------------
 
--- IF NOT EXISTS makes this setup safe to run more than once.
+-- Rebuild only this lesson's schema so the script is safe to rerun and does
+-- not duplicate the demonstration rows.
+DROP SCHEMA IF EXISTS staging CASCADE;
+
 CREATE SCHEMA IF NOT EXISTS staging;
 
 -- ---------------------------------------------------------------------------
