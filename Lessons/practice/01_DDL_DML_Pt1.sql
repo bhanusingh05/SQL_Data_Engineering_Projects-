@@ -1,12 +1,14 @@
 -- HOW TO RUN IN DUCKDB:
+-- 1. Open the project database: .open jobs_mart.duckdb
 -- .read Lessons/practice/01_DDL_DML_Pt1.sql
 --
 -- LESSON: DDL AND DML, PART 1
 -- Topic: databases, schemas, tables, and basic data changes in DuckDB
 --
--- DuckDB works with a database file and schemas inside that database. Unlike
--- some cloud warehouses, CREATE DATABASE and USE are not needed here. The
--- following script therefore creates and manages a staging schema directly.
+-- DuckDB works with a database file and schemas inside that database. The
+-- .open command above makes jobs_mart.duckdb the active database for this
+-- lesson. Unlike some cloud warehouses, CREATE DATABASE and USE are not
+-- needed in DuckDB; the database file is selected with .open instead.
 
 -- ---------------------------------------------------------------------------
 -- 1. DISCOVER THE CURRENT CATALOG
