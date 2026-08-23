@@ -1,3 +1,6 @@
+-- HOW TO RUN IN DUCKDB:
+-- .read Lessons/practice/01_DDL_DML_Pt1.sql
+--
 -- LESSON: DDL AND DML, PART 1
 -- Topic: databases, schemas, tables, and basic data changes in DuckDB
 --
