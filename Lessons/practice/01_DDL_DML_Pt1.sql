@@ -1,13 +1,9 @@
 -- HOW TO RUN IN DUCKDB:
--- 1. Start DuckDB from the project root: duckdb
+-- 1. Start DuckDB in the jobs_mart database: duckdb jobs_mart.duckdb
 -- 2. Run this file: .read Lessons/practice/01_DDL_DML_Pt1.sql
 --
--- Select the source database first so jobs_mart is not the active default
--- database when it is attached. The data_jobs database must already be
--- attached in the DuckDB session before running this file.
-USE data_jobs;
-ATTACH IF NOT EXISTS 'jobs_mart.duckdb' AS jobs_mart;
-USE jobs_mart;
+-- This lesson runs directly in the active jobs_mart database. No data_jobs
+-- attachment or database switch is required.
 --
 -- LESSON: DDL AND DML, PART 1
 -- Topic: databases, schemas, tables, and basic data changes in DuckDB
